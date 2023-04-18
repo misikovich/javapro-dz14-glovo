@@ -19,8 +19,26 @@ public class OrderService {
         List<Product> products = new ArrayList<>();
         products.add(Product.builder().cost(100).name("Байрактар ТБ-2").build());
         products.add(Product.builder().cost(100).name("Байрактар ТБ-3").build());
+        products.add(Product.builder().cost(100).name("Байрактар ТБ-1").build());
+        products.add(Product.builder().cost(100).name("Байрактар ТБ-9").build());
         addOrder(Order.builder().cost(200).date(LocalDate.now()).products(products).build());
         products.add(Product.builder().cost(100).name("Байрактар ТБ-2").build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
+        addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
         addOrder(Order.builder().cost(300).date(LocalDate.now()).products(products).build());
     }
 
