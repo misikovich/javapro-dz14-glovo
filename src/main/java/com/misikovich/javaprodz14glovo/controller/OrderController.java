@@ -22,7 +22,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public Order getOrder(@PathVariable Integer id) {
-        return this.orderService.getOrderById(id).orElseThrow();
+        return this.orderService.getOrderById(id);
     }
 
     @GetMapping

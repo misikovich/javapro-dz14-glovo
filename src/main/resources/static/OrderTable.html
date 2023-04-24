@@ -254,7 +254,7 @@
         .then((data) => {
             data.forEach(element => {
                 // orders.add(element);
-                ordersList.appendChild(createOrderElement(element.id, element.date, element.cost, element.products));
+                ordersList.appendChild(createOrderElement(element.id, new Date(element.date), element.cost, element.products));
             });
         })
     btn.addEventListener("click", (event) => {
@@ -272,7 +272,7 @@
             .then(response => response.json())
             .then(data => {
                 // access the properties of the parsed JSON response
-                const { id, date, cost, products } = data;
+                let { id, date = new Date(date), cost, products } = data;
 
                 if (searchOrder.hasChildNodes()) {
                     searchOrder.replaceChild(createOrderElement(id, date, cost, products), searchOrder.firstChild)
