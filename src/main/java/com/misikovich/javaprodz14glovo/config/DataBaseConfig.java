@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DataBaseConfig {
-    private final static String IP = "";
+    private final static String IP = "5.45.157.89";
     private final static Integer PORT = 5432;
     private final static String DATABASE = "postgres";
     private final static String USERNAME = "postgres";

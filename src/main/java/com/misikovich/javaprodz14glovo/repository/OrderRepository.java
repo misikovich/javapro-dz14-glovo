@@ -32,4 +32,19 @@ public class OrderRepository {
                 order.getCost(),
                 product_ids);
     }
+
+    public void update(Order order) {
+        Long[] product_ids = order.getProducts().stream()
+                .map(Product::getId)
+                .toList().toArray(new Long[0]);
+        jdbcTemplate.update("update public.order set date = ?, cost = ?, product_ids = ? where id = ?",
+                order.getDate(),
+                order.getCost(),
+                product_ids,
+                order.getId());
+    }
+
+    public void delete(long id) {
+        jdbcTemplate.update("delete from public.order where id = " + id);
+    }
 }

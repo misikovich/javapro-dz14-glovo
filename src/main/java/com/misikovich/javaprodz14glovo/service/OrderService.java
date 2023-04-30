@@ -18,6 +18,10 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        initDatabase(productRepository);
+    }
+
+    private void initDatabase(ProductRepository productRepository) {
         productRepository.save(Product.builder().name("Bayraktar TB-1").cost(50000).build());
         productRepository.save(Product.builder().name("DJI Mavic Mini").cost(800).build());
         productRepository.save(Product.builder().name("BinderoMobil").cost(666).build());
@@ -63,15 +67,22 @@ public class OrderService {
     }
 
     public Order addOrder(Order order) {
-
         order.setCost(getProducts(order).stream().mapToDouble(Product::getCost).sum());
         orderRepository.save(order);
         return order;
     }
+    public Order updateOrder(long id, Order order) {
+        order.setCost(getProducts(order).stream().mapToDouble(Product::getCost).sum());
+        order.setId(id);
+        orderRepository.update(order);
+        return order;
+    }
+    public Order deleteOrder(Long id) {
+        orderRepository.delete(id);
+        return Order.builder().id(id).build();
+    }
 
     private List<Product> getProducts(Order order) {
-//        DEPRECATED
-//        return order.getProducts().stream().map(product -> productRepository.getProductById(product.getId())).toList();
         List<Long> productsIds = order.getProducts().stream()
                 .map(Product::getId)
                 .toList();
