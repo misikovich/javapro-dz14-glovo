@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/product")
+@RequestMapping("/products")
 @AllArgsConstructor
 public class ProductController {
     private final ProductService productService;
@@ -16,17 +16,17 @@ public class ProductController {
         return this.productService.getProduct(id);
     }
 
-    @PostMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public Product deleteProduct(@PathVariable Long id) {
         return this.productService.deleteProduct(id);
     }
 
-    @PostMapping("/{id}/update")
+    @PostMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return this.productService.updateProduct(id, product);
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public Product addProduct(@RequestBody Product product) {
         return this.productService.addProduct(product);
     }
