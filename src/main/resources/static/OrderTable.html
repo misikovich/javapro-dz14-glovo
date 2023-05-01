@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* margin: 0 20px; */
+            padding: 0 20px;
+            background-color: #63C7B2;
+            /* set background color to blue-black */
+            color: #fff;
+            /* set font color to white */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 50px auto;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+            /* make table full width */
+            /* max-width: 800px; */
+            /* set max-width for table */
+            background-color: #71CCB9;
+            /* set table background color */
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th {
+            background-color: #63C7B2;
+            /* set header background color */
+            color: #fff;
+            /* set header font color */
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            height: 100%;
+            /* margin: 20px 0 20px 0; */
+            border-radius: 10px 0 0 10px;
+            border: none;
+            box-shadow: 0 0 16px #00000029;
+            width: 65%;
+            box-sizing: border-box;
+            /* max-width: 400px; */
+            font-size: 16px;
+            background-color: #63C7B2;
+            /* set search field background color */
+            color: #fff;
+            /* set search field font color */
+            outline: none;
+            flex-grow: 2;
+        }
+
+        input[type="text"]::placeholder {
+            color: #fff;
+            opacity: 0.5;
+        }
+
+        .search-btn {
+            box-shadow: 0 0 16px #00000029;
+            width: 35%;
+            height: 100%;
+            background: #42d7b7;
+            border-radius: 0 10px 10px 0;
+            border: none;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 40px;
+            transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.7s;
+            transform: scale(1);
+            user-select: none;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+            background: #0bffca;
+            box-shadow: 0 0 16px #d9d9d95e;
+
+        }
+
+        .search-btn:active {
+            transform: scale(0.98);
+            background: #0ad6aa;
+        }
+
+        .search-btn.error {
+            animation: horizontal-shaking 0.35s;
+            background-color: rgb(255, 101, 101);
+        }
+        .search-btn.success {
+            background-color: #17f787;
+            transform: scale(1.1);
+        }
+        @keyframes horizontal-shaking {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(5px)
+            }
+
+            50% {
+                transform: translateX(-5px)
+            }
+
+            75% {
+                transform: translateX(5px)
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .order-div {
+            height: 40px;
+            display: flex;
+            align-content: stretch;
+        }
+
+        #orders tbody tr:nth-child(even) {
+            background-color: #2c3e50;
+            /* set even row background color */
+        }
+
+        .orders {
+            background-color: #97ffe898;
+            /* height: 500px; */
+            min-height: 500px;
+            margin: 20px 0;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            column-gap: 10px;
+            overflow: hidden;
+        }
+
+        .order {
+            width: 100%;
+            height: 60px;
+            max-height: 60px;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 10px;
+            background-color: #42d7b7;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .order * {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-left: 2px solid #04e7b5;
+            flex-basis: auto;
+            justify-self: stretch;
+        }
+
+        .order .id-el {
+            border-left: none;
+        }
+
+        .order .id-el {
+            flex: 1;
+        }
+
+        .order .date-el {
+            flex: 1;
+        }
+
+        .order .cost-el {
+            flex: 1;
+        }
+
+        .order .products-list {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .order.header {
+            background-color: #00da6d;
+            max-height: 40px;
+        }
+
+        .order.header .products-list {
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .search-order {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Orders</h1>
+<div class="order-div">
+    <input type="text" id="search" placeholder="Enter order ID...">
+    <div class="search-btn" id="search-btn">Find</div>
+</div>
+<div class="search-order" id="search-order">
+    <div></div>
+</div>
+<div class="orders" id="orders">
+    <div class="order header">
+        <div class="id-el">ID</div>
+        <div class="date-el">Date</div>
+        <div class="cost-el">Cost</div>
+        <div class="products-list">Products</div>
+    </div>
+</div>
+
+<script>
+    const btn = document.getElementById("search-btn");
+    const searchField = document.getElementById("search");
+    const ordersList = document.getElementById("orders");
+    let orders = [];
+    const searchOrder = document.getElementById("search-order");
+
+    fetch("http://localhost:8080/glovo/order", {
+        mode: "cors",
+        method: "get",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then((data) => {
+            data.forEach(element => {
+                // orders.add(element);
+                ordersList.appendChild(createOrderElement(element.id, new Date(element.date), element.cost, element.products));
+            });
+        })
+    btn.addEventListener("click", (event) => {
+        const orderId = searchField.value; // replace with the actual order ID you want to fetch
+        const url = `http://localhost:8080/glovo/order/${orderId}`;
+        if (orderId == "" || orderId == null) return;
+
+        fetch(url, {
+            mode: "cors",
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // access the properties of the parsed JSON response
+                let { id, date = new Date(date), cost, products } = data;
+
+                if (searchOrder.hasChildNodes()) {
+                    searchOrder.replaceChild(createOrderElement(id, date, cost, products), searchOrder.firstChild)
+                } else {
+                    searchOrder.appendChild(createOrderElement(id, date, cost, products));
+
+                }
+
+                console.log(`Order ID: ${id}`);
+                console.log(`Date: ${date}`);
+                console.log(`Cost: ${cost}`);
+
+                console.log("Products:");
+                for (const product of products) {
+                    console.log(`${product.name} - ${product.cost}`);
+                }
+                btn.classList.add("success");
+                setTimeout(() => { btn.classList.remove("success") }, 600);
+
+            })
+            .catch(error => {
+                btn.classList.add("error");
+                setTimeout(() => { btn.classList.remove("error") }, 350);
+                console.error("Error fetching order:", error);
+            });
+
+    });
+    function createOrderElement(id, date, cost, products) {
+        const orderEl = document.createElement("div");
+        orderEl.classList.add("order");
+
+        const idEl = document.createElement("div");
+        idEl.classList.add("id-el");
+        idEl.textContent = id;
+
+        const dateEl = document.createElement("div");
+        dateEl.classList.add("date-el");
+        dateEl.textContent = date;
+
+        const costEl = document.createElement("div");
+        costEl.classList.add("cost-el");
+        costEl.textContent = cost;
+
+        const productsListEl = document.createElement("div");
+        productsListEl.classList.add("products-list");
+        for (const product of products) {
+            const productEl = document.createElement("div");
+            productEl.textContent = `${product.name} - ${product.cost}`;
+            productsListEl.appendChild(productEl);
+        }
+
+        orderEl.appendChild(idEl);
+        orderEl.appendChild(dateEl);
+        orderEl.appendChild(costEl);
+        orderEl.appendChild(productsListEl);
+
+        return orderEl;
+    }
+
+</script>
+</body>
+
+</html>
